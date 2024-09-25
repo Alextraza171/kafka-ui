@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-ui-back/kafka-ui.kafka-ui-back.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-ui-back/kafka-ui.kafka-ui-back.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-ui-back/kafka-ui.kafka-ui-back.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-ui-back/kafka-ui.kafka-ui-back.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-ui-back/kafka-ui.kafka-ui-back.test.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-ui-back/kafka-ui.kafka-ui-back.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-ui-front/kafka-ui.kafka-ui-front.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-ui-front/kafka-ui.kafka-ui-front.iml" />
+    </modules>
+  </component>
+</project>

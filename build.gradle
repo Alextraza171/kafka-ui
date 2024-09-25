@@ -1,0 +1,55 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+plugins {
+    id 'com.github.node-gradle.node' version '3.2.1'
+}
+
+allprojects {
+    group = 'org.alextraza'
+    version = '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(':kafka-ui-front') {
+    apply plugin: 'base'
+
+    String npm = 'npm'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        npm = 'npm.cmd'
+    }
+
+    tasks.register('npmInstall', Exec) {
+        commandLine npm, 'install'
+    }
+
+    tasks.register('npmBuild', Exec) {
+        dependsOn 'npmInstall'
+        commandLine npm, 'run', 'build'
+    }
+
+    tasks.register('copyFrontend', Copy) {
+        dependsOn 'npmBuild'
+        doFirst {
+            println "Starting to copy frontend files"
+        }
+
+        from("$rootDir/kafka-ui-front/build")
+        into("$rootDir/kafka-ui-back/src/main/resources/static")
+
+        doLast {
+            println "Files copied to static-test directory"
+        }
+    }
+
+}
+
+project(':kafka-ui-back') {
+    apply plugin: 'java'
+
+    build {
+        dependsOn ':kafka-ui-front:copyFrontend'
+    }
+}

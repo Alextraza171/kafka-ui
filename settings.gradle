@@ -1,0 +1,5 @@
+rootProject.name = 'kafka-ui'
+
+include 'kafka-ui-back'
+include 'kafka-ui-front'
+
