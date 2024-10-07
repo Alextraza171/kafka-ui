@@ -1,7 +1,7 @@
 .app-header {
   display: flex;
   align-items: center;
-  background-color: #ae6991;
+  background-color: var(--primary-color);
   padding: 10px;
   color: white;
   height: 90px;

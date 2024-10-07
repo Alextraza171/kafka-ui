@@ -16,7 +16,7 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/kafka-ui").setAllowedOrigins("*").withSockJS() // Вебсокет эндпоинт
+        registry.addEndpoint("/kafka-ui").setAllowedOrigins("http://localhost:3000").withSockJS()
     }
 
 }

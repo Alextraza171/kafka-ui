@@ -8,4 +8,6 @@ interface KafkaConfigurationService {
 
     fun removeConnection(topicId: String)
 
+    fun getConnections(): List<KafkaConnectionParams>
+
 }

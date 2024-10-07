@@ -24,19 +24,20 @@ import java.util.UUID
 class KafkaConfigurationServiceImpl(private val kafkaSender: KafkaSender, private val topicListener: TopicListener) : KafkaConfigurationService {
 
     private var listenerContainers: MutableMap<String, MessageListenerContainer> = HashMap()
+    private val activeConnections: MutableMap<String, KafkaConnectionParams> = HashMap()
+    private val connectionKeysToTopicId: MutableMap<String, String> = HashMap()
 
     private fun startListener(params: KafkaConnectionParams) {
 
-        // Конфигурация Kafka Consumer'а
         val consumerProps: MutableMap<String, Any> = HashMap()
         consumerProps[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = params.bootstrapServer
         consumerProps[ConsumerConfig.GROUP_ID_CONFIG] = UUID.randomUUID()
         consumerProps[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         consumerProps[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        consumerProps[ConsumerConfig.GROUP_ID_CONFIG] = UUID.randomUUID().toString()
 
         val consumerFactory: ConsumerFactory<String, String> = DefaultKafkaConsumerFactory(consumerProps)
 
-        // Настройки контейнера с указанным топиком
         val containerProps = ContainerProperties(params.topic)
         // Setting listener
         containerProps.messageListener =
@@ -44,7 +45,6 @@ class KafkaConfigurationServiceImpl(private val kafkaSender: KafkaSender, privat
                 topicListener.onMessage(params.topicId, record.value())
             }
 
-        // Создаем новый контейнер для слушателя
         val listenerContainer = KafkaMessageListenerContainer(consumerFactory, containerProps)
         listenerContainers[params.topicId] = listenerContainer
         listenerContainer.start()
@@ -53,6 +53,12 @@ class KafkaConfigurationServiceImpl(private val kafkaSender: KafkaSender, privat
     override fun addConnection(params: KafkaConnectionParams) {
         startListener(params)
 
+        val connectionKey = params.bootstrapServer + "-" + params.topic
+        if (activeConnections.containsKey(connectionKey))
+            return
+
+        activeConnections[connectionKey] = params
+        connectionKeysToTopicId[params.topicId] = connectionKey
         if (kafkaSender.isServerActive(params.bootstrapServer)) {
             kafkaSender.addTopic(params)
             return
@@ -70,6 +76,12 @@ class KafkaConfigurationServiceImpl(private val kafkaSender: KafkaSender, privat
     override fun removeConnection(topicId: String) {
         listenerContainers[topicId]!!.stop()
         kafkaSender.removeTopic(topicId)
+        activeConnections.remove(connectionKeysToTopicId[topicId])
+        connectionKeysToTopicId.remove(topicId)
+    }
+
+    override fun getConnections(): List<KafkaConnectionParams> {
+        return activeConnections.values.toList()
     }
 
     @PreDestroy

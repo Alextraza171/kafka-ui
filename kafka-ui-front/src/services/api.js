@@ -18,3 +18,13 @@ export const getData = async () => {
 };
 
 export const testConnection = (serverAddress) => apiClient.post('/test-connection', {serverAddress: serverAddress}, headers);
+
+export const createTopic = (createTopicRequest) => apiClient.post('/topic', createTopicRequest, headers);
+
+export const getTopics = (serverAddress) => apiClient.get(`/topic?serverAddress=${serverAddress}`);
+
+export const connectToTopic = (connectRequest) => apiClient.post('/connect', connectRequest, headers);
+
+export const sendMessage = (sendRequest) => apiClient.post('/send', sendRequest, headers);
+
+export const getActiveConnections = () => apiClient.get('/active-connections');

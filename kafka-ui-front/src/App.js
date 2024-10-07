@@ -1,33 +1,34 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import './global.css';
 import Header from './components/Header';
-import Home from './components/Home';
-import LeftPanel from './components/LeftPanel';
-import CreateConnectionDialog from './components/CreateConnectionDialog';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { BrowserRouter as Router } from 'react-router-dom';
+import MainArea from './components/MainArea';
 
 function App() {
-  const [open, setOpen] = useState(false);
 
-  const handleClickOpenCreateConnectionDialog = () => {
-    setOpen(true);
-  };
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#d599bc'
+      },
+    },
+  });
 
-  const handleCloseCreateConnectionDialog = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    document.documentElement.style.setProperty('--primary-color', theme.palette.primary.main);
+  }, [theme]);
 
   return (
-    <div className="kafka-ui">
-      <Header />
-      <div className="body-container">
-        <LeftPanel onOpenDialog={handleClickOpenCreateConnectionDialog}/>
-        <Home onOpenDialog={handleClickOpenCreateConnectionDialog}/>
+  <Router>
+    <ThemeProvider theme={theme}>
+      <div className="kafka-ui">
+        <Header />
+        <MainArea/>
       </div>
-      <div className="outer-area">
-        <CreateConnectionDialog open={open} onClose={handleCloseCreateConnectionDialog}/>
-      </div>
-    </div>
+    </ThemeProvider>
+  </Router>
   );
 }
 

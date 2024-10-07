@@ -76,11 +76,19 @@
 }
 
 .kafka-ui button:hover {
-  background-color: #f9f9f9;
+  background-color: #f1f1f1;
 }
 
-.kafka-ui input:focus {
-  border: solid 1px #73f573;
+.main-content {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 90px);
+  flex: 1;
 }
 
+.edit-dialog button {
+  border-radius: 20px;
+}
 

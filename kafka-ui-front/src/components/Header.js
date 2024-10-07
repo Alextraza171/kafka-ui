@@ -1,12 +1,14 @@
 import React from 'react';
-import './Header.css'; // Добавим стили для панели
+import './Header.css';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <header className="app-header">
       <div className="logo">
-        {/* Добавь здесь свой логотип */}
-        <img src="/images/logo.png" alt="Kafka UI Logo" />
+        <Link to="/">
+          <img src="/images/logo.png" alt="Kafka UI Logo" />
+        </Link>
       </div>
       <h1>Kafka UI</h1>
     </header>

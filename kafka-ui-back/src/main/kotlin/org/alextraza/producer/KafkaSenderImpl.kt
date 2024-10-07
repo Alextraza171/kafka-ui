@@ -1,18 +1,31 @@
 package org.alextraza.producer
 
 import org.alextraza.rest.KafkaConnectionParams
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 
 @Service
 class KafkaSenderImpl : KafkaSender {
 
+    private val logger = LoggerFactory.getLogger(KafkaSenderImpl::class.java)
+
     private var kafkaTemplates: MutableMap<String, KafkaTemplate<String, String>> = HashMap()
     private var connectionInfos: MutableMap<String, ConnectionInfo> = HashMap()
 
-    override fun send(topicId: String, message: String) {
+    override fun send(topicId: String, message: String, headers: Map<String, String>) {
         val connectionInfo = connectionInfos[topicId]
-        kafkaTemplates[connectionInfo!!.bootstrapServer]!!.send(connectionInfo.topic, message)
+        val kafkaTemplate = kafkaTemplates[connectionInfo!!.bootstrapServer]
+
+        val producerRecord = ProducerRecord<String, String>(connectionInfo.topic, message)
+
+        headers.forEach { (key, value) ->
+            producerRecord.headers().add(key, value.toByteArray())
+        }
+
+        kafkaTemplate?.send(producerRecord)
+        logger.info("Message sent")
     }
 
     override fun addTopic(kafkaConnectionParams: KafkaConnectionParams, kafkaTemplate: KafkaTemplate<String, String>) {

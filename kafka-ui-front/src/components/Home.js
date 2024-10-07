@@ -2,16 +2,26 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import './Home.css';
 import TestConnectionDialog from './TestConnectionDialog';
+import CreateTopicDialog from './CreateTopicDialog';
 
 const Home = ({ onOpenDialog }) => {
-  const [open, setOpen] = useState(false);
+  const [openTestConnectionDialog, setOpenTestConnectionDialog] = useState(false);
+  const [openCreateTopicDialog, setOpenCreateTopicDialog] = useState(false);
 
-  const handleCloseCreateConnectionDialog = () => {
-    setOpen(false);
+  const handleCloseTestConnectionDialog = () => {
+    setOpenTestConnectionDialog(false);
+  };
+
+  const handleCloseCreateTopicDialog = () => {
+    setOpenCreateTopicDialog(false);
   };
 
   const handleClickTestConnectionButton = () => {
-    setOpen(true);
+    setOpenTestConnectionDialog(true);
+  };
+
+  const handleClickCreateTopicButton = () => {
+    setOpenCreateTopicDialog(true);
   };
 
   return (
@@ -19,9 +29,11 @@ const Home = ({ onOpenDialog }) => {
       <div className="home">
           <Button variant="outlined" onClick={onOpenDialog}>New connection</Button>
           <Button variant="outlined" onClick={handleClickTestConnectionButton}>Test connection</Button>
+          <Button variant="outlined" onClick={handleClickCreateTopicButton}>Create topic</Button>
       </div>
       <div className="outer-area">
-          <TestConnectionDialog open={open} onClose={handleCloseCreateConnectionDialog}/>
+          <TestConnectionDialog open={openTestConnectionDialog} onClose={handleCloseTestConnectionDialog}/>
+          <CreateTopicDialog open={openCreateTopicDialog} onClose={handleCloseCreateTopicDialog}/>
       </div>
     </>
   );
