@@ -9,6 +9,7 @@ const CreateConnectionDialog = ({ open, onClose, onSuccess }) => {
   const [serverAddress, setServerAddress] = useState('');
   const [topic, setTopic] = useState('');
   const [availableTopics, setAvailableTopics] = useState([]);
+  const [serverAddressError, setServerAddressError] = useState(false);
 
   const handleClickConnectButton = () => {
     const uuid = uuidv4();
@@ -21,6 +22,12 @@ const CreateConnectionDialog = ({ open, onClose, onSuccess }) => {
   };
 
   const handleLoadTopics = () => {
+    if (!serverAddress) {
+      setServerAddressError(true);
+      return;
+    }
+
+    setServerAddressError(false);
     getTopics(serverAddress).then(rs => {
       setAvailableTopics(rs.data);
     });
@@ -36,7 +43,8 @@ const CreateConnectionDialog = ({ open, onClose, onSuccess }) => {
         <DialogTitle>Connection configuration</DialogTitle>
           <DialogContent>
             <TextField autoFocus margin="dense" id="name" label="Server address" type="text" autoComplete="off"
-            fullWidth variant="outlined" value={serverAddress} onChange={(e) => setServerAddress(e.target.value)}/>
+            fullWidth variant="outlined" value={serverAddress} onChange={(e) => setServerAddress(e.target.value)}
+            error={serverAddressError} helperText={serverAddressError ? 'Server address is required' : ''}/>
 
             {displayDropdown() ? (<Autocomplete options={availableTopics} value={topic}
               onChange={(event, newValue) => setTopic(newValue)} renderInput={(params) => <TextField {...params}

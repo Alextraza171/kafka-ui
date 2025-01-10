@@ -42,4 +42,14 @@ class TopicServiceImpl: TopicService {
         }
     }
 
+    override fun deleteTopics(bootstrapServer: String, topic: String) {
+        val props = Properties()
+        props[AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServer
+
+        AdminClient.create(props).use { adminClient ->
+            adminClient.deleteTopics(listOf(topic)).all().get()
+            println("Topic '$topic' has been deleted")
+        }
+    }
+
 }

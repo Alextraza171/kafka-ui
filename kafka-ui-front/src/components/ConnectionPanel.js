@@ -54,12 +54,16 @@ const ConnectionPanel = ({ server, topic, uuid }) => {
   };
 
   const handleSendMessage = () => {
-    sendMessage({topicId: uuid, message: inputMessage, headers: {}});
+    sendMessage({topicId: uuid, message: inputMessage, headers: headers.reduce((acc, item) => {
+                                                                  acc[item.key] = item.value;
+                                                                  return acc;
+                                                                }, {})})
   };
 
   const getDisplayedMessage = (msg) => {
     const jsonString = JSON.stringify(msg.body);
-    return jsonString.substring(0, 150) + jsonString.length > 150? '...' : '';
+    console.log(jsonString.substring(0, 150) + (jsonString.length > 150? '...' : ''));
+    return jsonString.substring(0, 150) + (jsonString.length > 150? '...' : '');
   };
 
 
@@ -69,23 +73,22 @@ const ConnectionPanel = ({ server, topic, uuid }) => {
           <div style={{ flexGrow: 1, display: 'flex' }}>
             <div style={{ width: '40%', padding: '20px' }}>
               <h3 className="panel-header">Send message</h3>
-              <div style={{top: '50px'}}>
-              <TextField
-                label="Enter Message"
-                InputProps={{
+              <div style={{top: '50px', display: 'flex', flexDirection: 'column'}}>
+                <TextField
+                  label="Enter Message"
+                  InputProps={{
                     style: {
                       height: '200px'
                     },
                   }}
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                multiline
-                rows={8}
-                maxRows={8}
-                fullWidth autoComplete="off"
-              />
-              <h3>Headers (Key / Value)</h3>
-              <div className="headers">
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  multiline
+                  rows={8}
+                  fullWidth autoComplete="off"
+                  />
+                <h3 style={{ alignSelf: 'flex-start' }}>Headers (Key / Value)</h3>
+                <div className="headers">
                 {headers.map((header, index) => (
                   <div className="header" key={index} style={{ display: 'flex', marginBottom: '8px' }}>
                     <TextField
@@ -102,9 +105,9 @@ const ConnectionPanel = ({ server, topic, uuid }) => {
                     />
                   </div>
                 ))}
-               </div>
+              </div>
 
-              <Button variant="text" onClick={addHeader} style={{fontSize: '20px', lineHeight: '10px'}}>+</Button>
+              <Button variant="text" onClick={addHeader} style={{fontSize: '20px', lineHeight: '10px', alignSelf: 'flex-start', padding: '10px 20px', minWidth: 'unset'}}>+</Button>
               <Button
                 variant="contained"
                 className="send-button"

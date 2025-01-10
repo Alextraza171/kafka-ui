@@ -8,4 +8,6 @@ interface TopicService {
 
     fun getTopics(bootstrapServer: String): List<String>
 
+    fun deleteTopics(bootstrapServer: String, topic: String)
+
 }
