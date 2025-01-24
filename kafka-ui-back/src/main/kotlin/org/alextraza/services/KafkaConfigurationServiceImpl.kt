@@ -42,7 +42,7 @@ class KafkaConfigurationServiceImpl(private val kafkaSender: KafkaSender, privat
         // Setting listener
         containerProps.messageListener =
             MessageListener { record: ConsumerRecord<String?, String?> ->
-                topicListener.onMessage(params.topicId, record.value())
+                topicListener.onMessage(params.topicId, record)
             }
 
         val listenerContainer = KafkaMessageListenerContainer(consumerFactory, containerProps)
