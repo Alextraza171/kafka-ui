@@ -22,6 +22,10 @@
   box-shadow: none;
 }
 
+.left-panel .connection-button.active {
+  background-color: #cbcbcb;
+}
+
 .left-panel button:hover {
   background-color: #d8d8d8;
 }

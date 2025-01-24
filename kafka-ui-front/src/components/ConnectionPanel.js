@@ -23,25 +23,26 @@ const ConnectionPanel = ({ server, topic, uuid }) => {
     setSelectedMessage(null);
   };
 
-  useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/kafka-ui');
-    const stompClient = Stomp.over(socket);
+useEffect(() => {
+  const socket = new SockJS('http://localhost:8080/kafka-ui');
+  const stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, () => {
-      stompClient.subscribe(`/topic/${uuid}`, (message) => {
-        console.log("Received message")
-        console.log(message)
-        const newMessage = {time: new Date(), body: JSON.parse(message.body)};
-          setMessages((prev) => [...prev, newMessage]);
-        });
+  stompClient.connect({}, () => {
+    const subscription = stompClient.subscribe(`/topic/${uuid}`, (message) => {
+      console.log('Received message:', message);
+      const newMessage = { time: new Date(), body: JSON.parse(message.body) };
+      setMessages((prev) => [...prev, newMessage]);
     });
 
+    // Очистка при размонтировании
     return () => {
+      subscription.unsubscribe();
       stompClient.disconnect(() => {
         console.log('Disconnected');
       });
     };
-  }, [uuid]);
+  });
+}, [uuid]);
 
   const addHeader = () => {
     setHeaders([...headers, { key: '', value: '' }]);

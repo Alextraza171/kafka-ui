@@ -24,9 +24,9 @@ class KafkaController(
     }
 
     @PostMapping("/test-connection")
-    fun testConnection(@RequestBody serverAddress: String) : Boolean {
+    fun testConnection(@RequestBody testConnectionRequest: TestConnectionRequest) : Boolean {
         try {
-            topicService.getTopics(serverAddress)
+            topicService.getTopics(testConnectionRequest.serverAddress)
             return true
         } catch (e: Exception) {
             return false

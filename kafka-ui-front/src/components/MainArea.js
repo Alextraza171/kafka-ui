@@ -48,9 +48,11 @@ const MainArea = () => {
        <LeftPanel onOpenDialog={handleClickOpenCreateConnectionDialog} connections={connections} onConnectionClick={openConnectionPanel}/>
          <div className="main-content">
            <Routes>
-             <Route path="/" element={<Home onOpenDialog={handleClickOpenCreateConnectionDialog} />} />
-             <Route path="/connection-panel" element={<ConnectionPanel server={activeServer} topic={activeTopic} uuid={activeUuid}/>} />
-           </Routes>
+             <Route path="/" element={<Home onOpenDialog={handleClickOpenCreateConnectionDialog} />}/>
+             <Route path="/connection-panel" element={<ConnectionPanel server={activeServer} topic={activeTopic} uuid={activeUuid} />}
+                    key={`${activeServer}-${activeTopic}-${activeUuid}`}
+             />
+             </Routes>
          </div>
      </div>
       <div className="outer-area">
