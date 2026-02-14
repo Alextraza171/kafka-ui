@@ -1,6 +1,6 @@
 package org.alextraza.producer
 
-import org.alextraza.rest.KafkaConnectionParams
+import org.alextraza.rest.dto.KafkaConnectionParams
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate

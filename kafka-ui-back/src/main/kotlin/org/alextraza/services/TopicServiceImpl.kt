@@ -1,6 +1,6 @@
 package org.alextraza.services
 
-import org.alextraza.rest.CreateTopicRequest
+import org.alextraza.rest.dto.CreateTopicRequest
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.admin.NewTopic

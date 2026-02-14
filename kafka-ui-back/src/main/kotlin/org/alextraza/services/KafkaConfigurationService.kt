@@ -1,6 +1,6 @@
 package org.alextraza.services
 
-import org.alextraza.rest.KafkaConnectionParams
+import org.alextraza.rest.dto.KafkaConnectionParams
 
 interface KafkaConfigurationService {
 

@@ -3,7 +3,7 @@ package org.alextraza.services
 import jakarta.annotation.PreDestroy
 import org.alextraza.consumer.TopicListener
 import org.alextraza.producer.KafkaSender
-import org.alextraza.rest.KafkaConnectionParams
+import org.alextraza.rest.dto.KafkaConnectionParams
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.producer.ProducerConfig

@@ -1,10 +1,13 @@
 package org.alextraza.rest
 
 import org.alextraza.producer.KafkaSender
+import org.alextraza.rest.dto.CreateTopicRequest
+import org.alextraza.rest.dto.KafkaConnectionParams
+import org.alextraza.rest.dto.SendMessageRequest
+import org.alextraza.rest.dto.TestConnectionRequest
 import org.alextraza.services.KafkaConfigurationService
 import org.alextraza.services.TopicService
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

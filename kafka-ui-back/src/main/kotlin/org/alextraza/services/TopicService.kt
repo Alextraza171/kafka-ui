@@ -1,6 +1,6 @@
 package org.alextraza.services
 
-import org.alextraza.rest.CreateTopicRequest
+import org.alextraza.rest.dto.CreateTopicRequest
 
 interface TopicService {
 
