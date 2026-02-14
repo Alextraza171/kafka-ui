@@ -54,6 +54,7 @@ const CreateConnectionDialog = ({ open, onClose, onSuccess }) => {
           <DialogContent>
             <Autocomplete
               freeSolo
+              disableClearable
               options={savedServers}
               value={serverAddress}
               onInputChange={(event, newValue) => setServerAddress(newValue)}

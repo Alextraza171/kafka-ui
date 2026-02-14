@@ -4,11 +4,13 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { sendMessage } from '../../services/api';
 import './ConnectionPanel.css';
+import { Autocomplete } from '@mui/material';
 
 const ConnectionPanel = ({ server, topic, uuid }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [headers, setHeaders] = useState([{ key: '', value: '' }]);
+  const [savedHeaderKeys, setSavedHeaderKeys] = useState([]);
 
   const [openReceivedMessageDialog, setOpenReceivedMessageDialog] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -24,6 +26,9 @@ const ConnectionPanel = ({ server, topic, uuid }) => {
   };
 
 useEffect(() => {
+  const stored = JSON.parse(localStorage.getItem('headerKeys')) || [];
+  setSavedHeaderKeys(stored);
+
   const socket = new SockJS('http://localhost:8080/kafka-ui');
   const stompClient = Stomp.over(socket);
 
@@ -55,6 +60,20 @@ useEffect(() => {
   };
 
   const handleSendMessage = () => {
+    const keysToSave = headers
+      .map(h => h.key)
+      .filter(k => k && k.trim() !== '');
+
+    if (keysToSave.length > 0) {
+      const stored = JSON.parse(localStorage.getItem('headerKeys')) || [];
+
+      const updated = [
+        ...new Set([...keysToSave, ...stored])
+      ].slice(0, 10);
+
+      localStorage.setItem('headerKeys', JSON.stringify(updated));
+      setSavedHeaderKeys(updated);
+    }
     sendMessage({topicId: uuid, message: inputMessage, headers: headers.reduce((acc, item) => {
                                                                   acc[item.key] = item.value;
                                                                   return acc;
@@ -92,11 +111,26 @@ useEffect(() => {
                 <div className="headers">
                 {headers.map((header, index) => (
                   <div className="header" key={index} style={{ display: 'flex', marginBottom: '8px' }}>
-                    <TextField
+                    <Autocomplete
+                      freeSolo
+                      options={savedHeaderKeys}
+                      disableClearable
                       value={header.key}
-                      onChange={(e) => handleHeaderChange(index, 'key', e.target.value)}
-                      InputProps={{ style: { height: '25px', marginRight: '1px' } }}
-                      placeholder="Header Key" autoComplete="off"
+                      onInputChange={(event, newValue) =>
+                        handleHeaderChange(index, 'key', newValue)
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Header Key"
+                          InputProps={{
+                            ...params.InputProps,
+                            style: { height: '25px', marginRight: '1px' }
+                          }}
+                          autoComplete="off"
+                        />
+                      )}
+                      sx={{ width: 150, marginRight: '4px' }}
                     />
                     <TextField
                       value={header.value}
